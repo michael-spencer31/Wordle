@@ -1,6 +1,17 @@
+import java.awt.*;
+
 public class ColourPicker{
 
-	public char[] getColour(String wordleIn, String wordIn){
+	private final Letter[] cells;
+
+	public ColourPicker(String cellValues){
+
+		cells = new Letter[5];
+		for(int i = 0; i < 5; i++){
+			cells[i] = new Letter(cellValues.charAt(i));
+		}
+	}
+	public Letter[] getColour(String wordleIn, String wordIn){
 
 		String wordle = wordleIn;
 		String word = wordIn;
@@ -13,37 +24,37 @@ public class ColourPicker{
 			wordleTemp[i] = wordle.charAt(i);
 			wordTemp[i] = word.charAt(i);
 		}
-		//check if correct letter and correct space
+		//check if correct letter and correct space (green spaces)
 		for(int i = 0; i < wordle.length(); i++){
+
+			Letter cell = cells[i];
 
 			if(wordTemp[i] != '_' && wordleTemp[i] == wordTemp[i]){
 
 				wordleTemp[i] = '_';
-				//System.out.println("True - green");
-				//set something green here
+				cell.setState(State.GREEN);
 			}
 		}
-		//check if correct letter and incorrect space
+		//check if correct letter and incorrect space (yellow spaces)
 		for(int i = 0; i < wordle.length(); i++){
 
-			if(wordTemp[i] != '_' && yellow(wordTemp, wordleTemp, wordle, i)){
+			Letter cell = cells[i];
 
-				//System.out.println("True - yellow");
-				//set something yellow here
+			if(cell.getState() != State.GREEN && wordTemp[i] != '_' && yellow(wordTemp, wordleTemp, wordle, i)){
+
+				cell.setState(State.ORANGE);
 			}
 		}
-		//check if incorrect letter and incorrect space
+		//check if incorrect letter and incorrect space (gray spaces)
 		for(int i = 0; i < wordle.length(); i++){
 
-			char c = word.charAt(i);
+			Letter cell = cells[i];
 
-			if(wordle.indexOf(c) == -1){
-
-				//System.out.println("True - gray");
-				//set something gray here
+			if(cell.getState() == null){
+				cell.setState(State.GRAY);
 			}
 		}
-		return wordleTemp;
+		return cells;
 	}
 	//helper function to determine the "yellow" characters
 	private static boolean yellow(char[] rowTemp, char[] wordleTemp, String wordle, int i){
@@ -57,7 +68,7 @@ public class ColourPicker{
 
 			if(i != j && c == wordleTemp[j]){
 
-				wordleTemp[i] = '!';
+				wordleTemp[j] = '_';
 				return true;
 			}
 		}
