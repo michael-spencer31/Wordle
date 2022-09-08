@@ -6,3 +6,8 @@ My implementation of the popular game, Wordle. Written in Java and uses swimg to
 
 ![Alt text](/screenshot.png?raw=true "Optional Title")
 
+# To Run
+
+```
+javac WordleGUI.java
+```
